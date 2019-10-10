@@ -1,0 +1,17 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  namespace: hello-universe
+  name: curl-hello-svc
+spec:
+  restartPolicy: Never
+  containers:
+    - image: nanda/ubuntu-curl:v1
+      args:
+        - "-c"
+        - curl http://hello-universe:3333/
+      command:
+        - "/bin/sh"
+      name: curl-the-svc
+  nodeSelector:
+    kubernetes.io/hostname: minikube
