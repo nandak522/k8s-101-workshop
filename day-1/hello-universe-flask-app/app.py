@@ -35,7 +35,7 @@ def root():
     margin: 0 auto;
     font-family: sans-serif;
     margin-top: 40px;
-    background: #000;
+    background: #3f3f4a;
     color: #FFF;
     """
     response = "<title>Hello Universe</title><body style='{}'><h3>Request Headers</h3><ul>{}</ul><hr/><h3>Response</h3><div style='font-size:20px;'>{}</div></body>".format(style.replace("\n", " "), request_headers, response_body)
