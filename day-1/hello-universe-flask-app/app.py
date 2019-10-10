@@ -30,7 +30,15 @@ def root():
         )
     )
     response_body = "[HOST: %s (up since %s)] Hello Universe\n" % (socket.gethostname(), elapsed())
-    response = "<title>Hello Universe</title><h3>Request Headers</h3><ul>{}</ul><hr/><h3>Response</h3><div style='font-size:20px;'>{}</div>".format(request_headers, response_body)
+    style = """
+    width: 800px;
+    margin: 0 auto;
+    font-family: sans-serif;
+    margin-top: 40px;
+    background: #000;
+    color: #FFF;
+    """
+    response = "<title>Hello Universe</title><body style='{}'><h3>Request Headers</h3><ul>{}</ul><hr/><h3>Response</h3><div style='font-size:20px;'>{}</div></body>".format(style.replace("\n", " "), request_headers, response_body)
     return response
 
 if __name__ == "__main__":

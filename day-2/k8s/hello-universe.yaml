@@ -4,6 +4,28 @@ metadata:
   name: hello-universe
 
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    name: hello-universe
+  name: hello-universe
+  namespace: hello-universe
+data:
+  ADD_FUN: YEAH
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    name: hello-universe
+  name: hello-universe
+  namespace: hello-universe
+data:
+  ADD_FUN: WUVBSAo=
+
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -20,6 +42,14 @@ spec:
             - protocol: TCP
               name: pythonport
               containerPort: 9999
+          env:
+            - name: ADD_WORK
+              value: NOPE
+          envFrom:
+            - configMapRef:
+                name: hello-universe
+            # - secretRef:
+            #     name: hello-universe
           livenessProbe:
             initialDelaySeconds: 5
             tcpSocket:

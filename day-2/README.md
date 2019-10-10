@@ -10,7 +10,11 @@
 cd k8s
 kubectl apply -f hello-universe.yaml
 kubectl get ns
-kubect -n hello-universe get deploy
-kubect -n hello-universe get po
-kubect -n hello-universe get cm
+kubectl -n hello-universe get deploy
+kubectl -n hello-universe get po
+kubectl -n hello-universe get cm
+kubectl -n hello-universe get svc
+minikube service hello-universe -n hello-universe
+# on linux: $ open localhost:32000 in the browser
+# on mac: $ open <vm-ip>:32000 in the browser
 ```
