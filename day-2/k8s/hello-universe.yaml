@@ -35,7 +35,7 @@ spec:
   template:
     spec:
       containers:
-        - image: local/hello-universe:v1
+        - image: local/hello-universe:v2
           name: hello-universe
           imagePullPolicy: IfNotPresent
           ports:
