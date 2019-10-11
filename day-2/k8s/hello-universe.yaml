@@ -32,6 +32,7 @@ metadata:
   namespace: hello-universe
   name: hello-universe
 spec:
+  replicas: 2
   template:
     spec:
       containers:
