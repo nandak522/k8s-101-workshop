@@ -1,0 +1,34 @@
+# Default values for hello-universe-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: "hello-universe"
+deployments:
+  first:
+    replicas: 2
+    deploymentName: "hello-universe"
+    rollingUpdate:
+      maxSurge: "50%"
+      maxUnavailable: "30%"
+    nodeSelector:
+      kubernetes.io/hostname: minikube
+    containerName: "hello-universe-python"
+    configMap:
+      ADD_FUN: "TRUE"
+    infraConfigMap:
+      KAFKA_HOSTS: "$kafka"
+      ZOOKEEPER_HOSTS: "$zookeeper"
+    secrets:
+      ADD_PLAY: VFJVRQ==
+    image:
+      registry: local
+      repository: hello-universe
+      tag: "v1"
+      pullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: "0.30"
+        memory: 300M
+      requests:
+        cpu: "0.10"
+        memory: 180M

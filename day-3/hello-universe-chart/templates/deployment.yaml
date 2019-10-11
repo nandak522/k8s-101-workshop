@@ -1,0 +1,66 @@
+{{ $namespace := .Values.namespace }}
+{{ $infra := .Values.infra }}
+{{ range $deploymentId, $deploymentConfig := .Values.deployments }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ $deploymentConfig.deploymentName }}"
+  namespace: {{ $namespace }}
+spec:
+  replicas: {{ default 1 $deploymentConfig.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ $deploymentConfig.rollingUpdate.maxSurge | quote }}
+      {{ if eq ($deploymentConfig.replicas | int) 1 -}}
+      maxUnavailable: "0%"
+      {{ else -}}
+      maxUnavailable: {{ default "10%" $deploymentConfig.rollingUpdate.maxUnavailable | quote -}}
+      {{- end }}
+  selector:
+    matchLabels:
+      name: "{{ $deploymentConfig.deploymentName }}"
+  template:
+    metadata:
+      labels:
+        name: "{{ $deploymentConfig.deploymentName }}"
+      {{ $deploymentData := dict "namespace" $namespace "deploymentConfig" $deploymentConfig "infra" $infra }}
+      {{- include "hello-universe-chart.podAnnotations" $deploymentData | indent 6 }}
+    spec:
+      containers:
+        - name: {{ $deploymentConfig.containerName }}
+          image: "{{ $deploymentConfig.image.registry }}/{{ $deploymentConfig.image.repository }}:{{ $deploymentConfig.image.tag }}"
+          imagePullPolicy: {{ $deploymentConfig.image.pullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: "{{ $deploymentConfig.deploymentName }}"
+          - configMapRef:
+              name: "{{ $deploymentConfig.deploymentName }}-infra"
+          - secretRef:
+              name: "{{ $deploymentConfig.deploymentName }}"
+          ports:
+            - protocol: TCP
+              name: pythonport
+              containerPort: 9999
+          livenessProbe:
+            initialDelaySeconds: 5
+            tcpSocket:
+              port: pythonport
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: "/"
+              port: pythonport
+            timeoutSeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            initialDelaySeconds: 5
+            failureThreshold: 2
+          resources:
+            {{- toYaml $deploymentConfig.resources | trimSuffix "\n" | nindent 12 }}
+      {{- with $deploymentConfig.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | trimSuffix "\n" | nindent 8 }}
+      {{- end }}
+---
+{{ end }}

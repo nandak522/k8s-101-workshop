@@ -1,0 +1,9 @@
+{{ $namespace := .Values.namespace }}
+{{ $infra := .Values.infra }}
+{{ range $deploymentId, $deploymentConfig := .Values.deployments }}
+{{ $deploymentData := dict "namespace" $namespace "deploymentConfig" $deploymentConfig "infra" $infra }}
+{{- include "hello-universe-chart.configmap" $deploymentData }}
+---
+{{ include "hello-universe-chart.infra-configmap" $deploymentData }}
+---
+{{ end }}

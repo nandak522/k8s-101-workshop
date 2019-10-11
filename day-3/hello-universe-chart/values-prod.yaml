@@ -1,0 +1,12 @@
+namespace: "hello-universe"
+deployments:
+  first:
+    replicas: 5
+    rollingUpdate:
+      maxSurge: "25%"
+    rollingUpdate:
+      maxUnavailable: "25%"
+    nodeSelector:
+      environment: prod
+    image:
+      tag: "v1"

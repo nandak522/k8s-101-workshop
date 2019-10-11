@@ -1,0 +1,10 @@
+namespace: "hello-universe-qa"
+deployments:
+  first:
+    replicas: 2
+    rollingUpdate:
+      maxUnavailable: "25%"
+    nodeSelector:
+      environment: qa
+    image:
+      tag: "v1"

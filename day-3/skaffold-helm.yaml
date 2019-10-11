@@ -1,0 +1,19 @@
+apiVersion: skaffold/v1beta13
+kind: Config
+build:
+  artifacts:
+  - image: local/hello-universe
+    context: hello-universe-flask-app
+  tagPolicy:
+    dateTime:
+      timezone: "Local"
+deploy:
+  statusCheckDeadlineSeconds: 10
+  helm:
+    releases:
+    - name: v1
+      chartPath: "hello-universe-chart"
+      wait: true
+      recreatePods: true
+      values:
+        image: local/hello-universe

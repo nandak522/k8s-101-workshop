@@ -1,0 +1,10 @@
+namespace: "hello-universe-hqa"
+deployments:
+  first:
+    replicas: 3
+    rollingUpdate:
+      maxUnavailable: "0%"
+    nodeSelector:
+      environment: hqa
+    image:
+      tag: "v1"
